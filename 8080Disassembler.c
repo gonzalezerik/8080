@@ -1,12 +1,14 @@
+
 #include <stdio.h>
 #include <stdlib.h>
+#include "cpu.h"
 
 int main(){
     FILE *fptr;  //to open a file, a pointer needs to be declared
     //fptr = fopen("C:\Users\gonza\Documents\8080\invaders.h", "rb"); //rb for binary mode, w for writing mode
 
 
-   if ((fptr = fopen("invaders.h","rb")) == NULL){ //opens file
+   if ((fptr = fopen("invaders","rb")) == NULL){ //opens file
        printf("Error! opening file");
 
        // Program exits if the file pointer returns NULL.
@@ -23,314 +25,307 @@ int main(){
    fread(buffer, fsize, 1, fptr); //reading the code into a buffer
    fclose(fptr);
 
-   int pc = 0;
-   int k = 0;
-   unsigned char *code = &buffer[pc];
+   /*for(int i = 0; i < fsize; i++ ){
+      if(buffer[i] == 0x00){
+         printf("%02x ", buffer[i]);
+         printf("NOP\n");
+      } else 
+      printf("%02x \n", buffer[i]);
+   }*/
 
-   while (k < fsize){
+   cpu.pc = 0;
 
-      int count;
-      printf("\t  ");
 
-      while (k < 16){
-         printf("%02x ", pc); //number of bytes used;
-         pc++;
-         k++;
+   while (cpu.pc < fsize){
+      unsigned char *codeP = &buffer[cpu.pc];
+      int opbytes = 1;
+      printf("%04x ", cpu.pc);
+
+      switch(*codeP){
+      case 0x00: printf("NOP"); break;    
+      case 0x01: printf("LXI    B,#$%02x%02x", codeP[2], codeP[1]); opbytes=3; break;    
+      case 0x02: printf("STAX   B"); break;    
+      case 0x03: printf("INX    B"); break;    
+      case 0x04: printf("INR    B"); break;    
+      case 0x05: printf("DCR    B"); break;    
+      case 0x06: printf("MVI    B,#$%02x", codeP[1]); opbytes=2; break;    
+      case 0x07: printf("RLC"); break;    
+      case 0x08: printf("NOP"); break;    
+      case 0x09: printf("DAD    B"); break;
+      case 0x0a: printf("LDAX   B"); break;
+      case 0x0b: printf("DCX    B"); break;
+      case 0x0c: printf("INR    C"); break;
+      case 0x0d: printf("DCR    C"); break;
+      case 0x0e: printf("MVI    C"); opbytes = 2; break;
+      case 0x0f: printf("RRC "); break;
+
+
+      case 0x10: printf("NOP"); break;
+      case 0x11: printf("LXI    D,"); opbytes = 3; break;
+      case 0x12: printf("STAX   D"); break; 
+      case 0x13: printf(" "); break;
+      case 0x14: printf(" "); break;
+      case 0x15: printf(" "); break;
+      case 0x16: printf(" "); break;
+      case 0x17: printf(" "); break;
+      case 0x18: printf(" "); break;
+      case 0x19: printf(" "); break;
+      case 0x1a: printf(" "); break;
+      case 0x1b: printf(" "); break;
+      case 0x1c: printf(" ");
+      case 0x1d: printf(" ");
+      case 0x1e: printf(" ");
+      case 0x1f: printf(" ");
+
+      case 0x20: printf(" ");
+      case 0x21: printf(" ");
+      case 0x22: printf(" ");
+      case 0x23: printf(" ");
+      case 0x24: printf(" ");
+      case 0x25: printf(" ");
+      case 0x26: printf(" ");
+      case 0x27: printf(" ");
+      case 0x28: printf(" ");
+      case 0x29: printf(" ");
+      case 0x2a: printf(" ");
+      case 0x2b: printf(" ");
+      case 0x2c: printf(" ");
+      case 0x2d: printf(" ");
+      case 0x2e: printf(" ");
+      case 0x2f: printf(" ");
+
+      case 0x30: printf(" ");
+      case 0x31: printf(" ");
+      case 0x32: printf(" ");
+      case 0x33: printf(" ");
+      case 0x34: printf(" ");
+      case 0x35: printf(" ");
+      case 0x36: printf(" ");
+      case 0x37: printf(" ");
+      case 0x38: printf(" ");
+      case 0x39: printf(" ");
+      case 0x3a: printf(" ");
+      case 0x3b: printf(" ");
+      case 0x3c: printf(" ");
+      case 0x3d: printf(" ");
+      case 0x3e: printf(" ");
+      case 0x3f: printf(" ");
+
+
+      case 0x40: printf(" ");
+      case 0x41: printf(" ");
+      case 0x42: printf(" ");
+      case 0x43: printf(" ");
+      case 0x44: printf(" ");
+      case 0x45: printf(" ");
+      case 0x46: printf(" ");
+      case 0x47: printf(" ");
+      case 0x48: printf(" ");
+      case 0x49: printf(" ");
+      case 0x4a: printf(" ");
+      case 0x4b: printf(" ");
+      case 0x4c: printf(" ");
+      case 0x4d: printf(" ");
+      case 0x4e: printf(" ");
+      case 0x4f: printf(" ");
+
+      case 0x50: printf(" ");
+      case 0x51: printf(" ");
+      case 0x52: printf(" ");
+      case 0x53: printf(" ");
+      case 0x54: printf(" ");
+      case 0x55: printf(" ");
+      case 0x56: printf(" ");
+      case 0x57: printf(" ");
+      case 0x58: printf(" ");
+      case 0x59: printf(" ");
+      case 0x5a: printf(" ");
+      case 0x5b: printf(" ");
+      case 0x5c: printf(" ");
+      case 0x5d: printf(" ");
+      case 0x5e: printf(" ");
+      case 0x5f: printf(" ");
+
+      case 0x60: printf(" ");
+      case 0x61: printf(" ");
+      case 0x62: printf(" ");
+      case 0x63: printf(" ");
+      case 0x64: printf(" ");
+      case 0x65: printf(" ");
+      case 0x66: printf(" ");
+      case 0x67: printf(" ");
+      case 0x68: printf(" ");
+      case 0x69: printf(" ");
+      case 0x6a: printf(" ");
+      case 0x6b: printf(" ");
+      case 0x6c: printf(" ");
+      case 0x6d: printf(" ");
+      case 0x6e: printf(" ");
+      case 0x6f: printf(" ");
+
+      case 0x70: printf(" ");
+      case 0x71: printf(" ");
+      case 0x72: printf(" ");
+      case 0x73: printf(" ");
+      case 0x74: printf(" ");
+      case 0x75: printf(" ");
+      case 0x76: printf(" ");
+      case 0x77: printf(" ");
+      case 0x78: printf(" ");
+      case 0x79: printf(" ");
+      case 0x7a: printf(" ");
+      case 0x7b: printf(" ");
+      case 0x7c: printf(" ");
+      case 0x7d: printf(" ");
+      case 0x7e: printf(" ");
+      case 0x7f: printf(" ");
+
+      case 0x80: printf(" ");
+      case 0x81: printf(" ");
+      case 0x82: printf(" ");
+      case 0x83: printf(" ");
+      case 0x84: printf(" ");
+      case 0x85: printf(" ");
+      case 0x86: printf(" ");
+      case 0x87: printf(" ");
+      case 0x88: printf(" ");
+      case 0x89: printf(" ");
+      case 0x8a: printf(" ");
+      case 0x8b: printf(" ");
+      case 0x8c: printf(" ");
+      case 0x8d: printf(" ");
+      case 0x8e: printf(" ");
+      case 0x8f: printf(" ");
+
+      case 0x90: printf(" ");
+      case 0x91: printf(" ");
+      case 0x92: printf(" ");
+      case 0x93: printf(" ");
+      case 0x94: printf(" ");
+      case 0x95: printf(" ");
+      case 0x96: printf(" ");
+      case 0x97: printf(" ");
+      case 0x98: printf(" ");
+      case 0x99: printf(" ");
+      case 0x9a: printf(" ");
+      case 0x9b: printf(" ");
+      case 0x9c: printf(" ");
+      case 0x9d: printf(" ");
+      case 0x9e: printf(" ");
+      case 0x9f: printf(" ");
+
+      case 0xa0: printf(" ");
+      case 0xa1: printf(" ");
+      case 0xa2: printf(" ");
+      case 0xa3: printf(" ");
+      case 0xa4: printf(" ");
+      case 0xa5: printf(" ");
+      case 0xa6: printf(" ");
+      case 0xa7: printf(" ");
+      case 0xa8: printf(" ");
+      case 0xa9: printf(" ");
+      case 0xaa: printf(" ");
+      case 0xab: printf(" ");
+      case 0xac: printf(" ");
+      case 0xad: printf(" ");
+      case 0xae: printf(" ");
+      case 0xaf: printf(" ");
+
+      case 0xb0: printf(" ");
+      case 0xb1: printf(" ");
+      case 0xb2: printf(" ");
+      case 0xb3: printf(" ");
+      case 0xb4: printf(" ");
+      case 0xb5: printf(" ");
+      case 0xb6: printf(" ");
+      case 0xb7: printf(" ");
+      case 0xb8: printf(" ");
+      case 0xb9: printf(" ");
+      case 0xba: printf(" ");
+      case 0xbb: printf(" ");
+      case 0xbc: printf(" ");
+      case 0xbd: printf(" ");
+      case 0xbe: printf(" ");
+      case 0xbf: printf(" ");
+
+      case 0xc0: printf(" ");
+      case 0xc1: printf(" ");
+      case 0xc2: printf(" ");
+      case 0xc3: printf(" ");
+      case 0xc4: printf(" ");
+      case 0xc5: printf(" ");
+      case 0xc6: printf(" ");
+      case 0xc7: printf(" ");
+      case 0xc8: printf(" ");
+      case 0xc9: printf(" ");
+      case 0xca: printf(" ");
+      case 0xcb: printf(" ");
+      case 0xcc: printf(" ");
+      case 0xcd: printf(" ");
+      case 0xce: printf(" ");
+      case 0xcf: printf(" ");
+
+      case 0xd0: printf(" ");
+      case 0xd1: printf(" ");
+      case 0xd2: printf(" ");
+      case 0xd3: printf(" ");
+      case 0xd4: printf(" ");
+      case 0xd5: printf(" ");
+      case 0xd6: printf(" ");
+      case 0xd7: printf(" ");
+      case 0xd8: printf(" ");
+      case 0xd9: printf(" ");
+      case 0xda: printf(" ");
+      case 0xdb: printf(" ");
+      case 0xdc: printf(" ");
+      case 0xdd: printf(" ");
+      case 0xde: printf(" ");
+      case 0xdf: printf(" ");
+
+      case 0xe0: printf(" ");
+      case 0xe1: printf(" ");
+      case 0xe2: printf(" ");
+      case 0xe3: printf(" ");
+      case 0xe4: printf(" ");
+      case 0xe5: printf(" ");
+      case 0xe6: printf(" ");
+      case 0xe7: printf(" ");
+      case 0xe8: printf(" ");
+      case 0xe9: printf(" ");
+      case 0xea: printf(" ");
+      case 0xeb: printf(" ");
+      case 0xec: printf(" ");
+      case 0xed: printf(" ");
+      case 0xee: printf(" ");
+      case 0xef: printf(" ");
+
+      case 0xf0: printf(" ");
+      case 0xf1: printf(" ");
+      case 0xf2: printf(" ");
+      case 0xf3: printf(" ");
+      case 0xf4: printf(" ");
+      case 0xf5: printf(" ");
+      case 0xf6: printf(" ");
+      case 0xf7: printf(" ");
+      case 0xf8: printf(" ");
+      case 0xf9: printf(" ");
+      case 0xfa: printf(" ");
+      case 0xfb: printf(" ");
+      case 0xfc: printf(" ");
+      case 0xfd: printf(" ");
+      case 0xfe: printf(" ");
+      case 0xff: printf(" ");
+
+
+
+
+
+
+
       }
-
       printf("\n");
-      pc = k;
-
-      printf("%08x: ", pc);
-
-      for (int i = 0; i < 16; i++){
-         printf("%02x ", code[k]); //Prints out row of 16 codes
-         k++;
-      }
-
-  }
-   pc = 0;
-   printf("\n\n");
-
-   while (pc < fsize){
-      int opbytes = 1;    
-      printf ("%04x ", pc);
-
-      switch (code[pc])    
-      {    
-        case 0x00: printf("NOP"); break;    
-        case 0x01: printf("LXI    B,#$%02x%02x", code[2], code[1]); opbytes=3; break;    
-        case 0x02: printf("STAX   B"); break;    
-        case 0x03: printf("INX    B"); break;    
-        case 0x04: printf("INR    B"); break;    
-        case 0x05: printf("DCR    B"); break;    
-        case 0x06: printf("MVI    B,#$%02x", code[1]); opbytes=2; break;    
-        case 0x07: printf("RLC"); break;    
-        case 0x08: printf("NOP"); break;    
-        case 0x09: printf("DAD    B");
-        case 0x0a: printf("LDAX   B");
-        case 0x0b: printf("DCX    B");
-        case 0x0c: printf("INR    C");
-        case 0x0d: printf("DCR    C");
-        case 0x0e: printf("MVI    C");
-        case 0x0f: printf("RR     C");
-        case 0x10:
-        case 0x11: printf("LXI    D")
-        case 0x12:
-        case 0x13:
-        case 0x14:
-        case 0x15:
-        case 0x16:
-        case 0x17:
-        case 0x18:
-        case 0x19:
-        case 0x1a:
-        case 0x1b:
-        case 0x1c:
-        case 0x1d:
-        case 0x1e:
-        case 0x1f:
-        case 0x20:
-        case 0x21:
-        case 0x22:
-        case 0x23:
-        case 0x24:
-        case 0x25:
-        case 0x26:
-        case 0x27:
-        case 0x28:
-        case 0x29:
-        case 0x2a:
-        case 0x2b:
-        case 0x2c:
-        case 0x2d:
-        case 0x2e:
-        case 0x2f:
-        case 0x30:
-        case 0x31:
-        case 0x32:
-        case 0x33:
-        case 0x34:
-        case 0x35:
-        case 0x36:
-        case 0x37:
-        case 0x38:
-        case 0x39:
-        case 0x3a:
-        case 0x3b:
-        case 0x3c:
-        case 0x3d:
-        case 0x3e:
-        case 0x3f:
-
-        case 0x40:
-        case 0x41:
-        case 0x42:
-        case 0x43:
-        case 0x44:
-        case 0x45:
-        case 0x46:
-        case 0x47:
-        case 0x48:
-        case 0x49:
-        case 0x4a:
-        case 0x4b:
-        case 0x4c:
-        case 0x4d:
-        case 0x4e:
-        case 0x4f:
-
-        case 0x50:
-        case 0x51:
-        case 0x52:
-        case 0x53:
-        case 0x54:
-        case 0x55:
-        case 0x56:
-        case 0x57:
-        case 0x58:
-        case 0x59:
-        case 0x5a:
-        case 0x5b:
-        case 0x5c:
-        case 0x5d:
-        case 0x5e:
-        case 0x5f:
-
-        case 0x60:
-        case 0x61:
-        case 0x62:
-        case 0x63:
-        case 0x64:
-        case 0x65:
-        case 0x66:
-        case 0x67:
-        case 0x68:
-        case 0x69:
-        case 0x6a:
-        case 0x6b:
-        case 0x6c:
-        case 0x6d:
-        case 0x6e:
-        case 0x6f:
-
-        case 0x70:
-        case 0x71:
-        case 0x72:
-        case 0x73:
-        case 0x74:
-        case 0x75:
-        case 0x76:
-        case 0x77:
-        case 0x78:
-        case 0x79:
-        case 0x7a:
-        case 0x7b:
-        case 0x7c:
-        case 0x7d:
-        case 0x7e:
-        case 0x7f:
-
-        case 0x80:
-        case 0x81:
-        case 0x82:
-        case 0x83:
-        case 0x84:
-        case 0x85:
-        case 0x86:
-        case 0x87:
-        case 0x88:
-        case 0x89:
-        case 0x8a:
-        case 0x8b:
-        case 0x8c:
-        case 0x8d:
-        case 0x8e:
-        case 0x8f:
-
-        case 0x90:
-        case 0x91:
-        case 0x92:
-        case 0x93:
-        case 0x94:
-        case 0x95:
-        case 0x96:
-        case 0x97:
-        case 0x98:
-        case 0x99:
-        case 0x9a:
-        case 0x9b:
-        case 0x9c:
-        case 0x9d:
-        case 0x9e:
-        case 0x9f:
-
-        case 0xa0:
-        case 0xa1:
-        case 0xa2:
-        case 0xa3:
-        case 0xa4:
-        case 0xa5:
-        case 0xa6:
-        case 0xa7:
-        case 0xa8:
-        case 0xa9:
-        case 0xaa:
-        case 0xab:
-        case 0xac:
-        case 0xad:
-        case 0xae:
-        case 0xaf:
-
-        case 0xb0:
-        case 0xb1:
-        case 0xb2:
-        case 0xb3:
-        case 0xb4:
-        case 0xb5:
-        case 0xb6:
-        case 0xb7:
-        case 0xb8:
-        case 0xb9:
-        case 0xba:
-        case 0xbb:
-        case 0xbc:
-        case 0xbd:
-        case 0xbe:
-        case 0xbf:
-
-        case 0xc0:
-        case 0xc1:
-        case 0xc2:
-        case 0xc3:
-        case 0xc4:
-        case 0xc5:
-        case 0xc6:
-        case 0xc7:
-        case 0xc8:
-        case 0xc9:
-        case 0xca:
-        case 0xcb:
-        case 0xcc:
-        case 0xcd:
-        case 0xce:
-        case 0xcf:
-
-        case 0xd0:
-        case 0xd1:
-        case 0xd2:
-        case 0xd3:
-        case 0xd4:
-        case 0xd5:
-        case 0xd6:
-        case 0xd7:
-        case 0xd8:
-        case 0xd9:
-        case 0xda:
-        case 0xdb:
-        case 0xdc:
-        case 0xdd:
-        case 0xde:
-        case 0xdf:
-
-        case 0xe0:
-        case 0xe1:
-        case 0xe2:
-        case 0xe3:
-        case 0xe4:
-        case 0xe5:
-        case 0xe6:
-        case 0xe7:
-        case 0xe8:
-        case 0xe9:
-        case 0xea:
-        case 0xeb:
-        case 0xec:
-        case 0xed:
-        case 0xee:
-        case 0xef:
-
-        case 0xf0:
-        case 0xf1:
-        case 0xf2:
-        case 0xf3:
-        case 0xf4:
-        case 0xf5:
-        case 0xf6:
-        case 0xf7:
-        case 0xf8:
-        case 0xf9:
-        case 0xfa:
-        case 0xfb:
-        case 0xfc:
-        case 0xfd:
-        case 0xfe:
-        case 0xff:
-      }
-      printf("\n"); 
-      pc += opbytes;
+      cpu.pc += opbytes;
    }
-
 
 
    //printf("\n");
