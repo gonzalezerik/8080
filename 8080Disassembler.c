@@ -8,7 +8,7 @@ int main(){
     //fptr = fopen("C:\Users\gonza\Documents\8080\invaders.h", "rb"); //rb for binary mode, w for writing mode
 
 
-   if ((fptr = fopen("invaders","rb")) == NULL){ //opens file
+   if ((fptr = fopen("invaders.h","rb")) == NULL){ //opens file
        printf("Error! opening file");
 
        // Program exits if the file pointer returns NULL.
@@ -25,15 +25,26 @@ int main(){
    fread(buffer, fsize, 1, fptr); //reading the code into a buffer
    fclose(fptr);
 
-   /*for(int i = 0; i < fsize; i++ ){
-      if(buffer[i] == 0x00){
-         printf("%02x ", buffer[i]);
-         printf("NOP\n");
-      } else 
-      printf("%02x \n", buffer[i]);
-   }*/
+   int top = 0;
+   int offset = 0;
+   int k = 0;
 
-   cpu.pc = 0;
+   printf("      ");
+   for(int i = 0; i < 16; i ++){
+      printf("%02x ", top);
+      top++;
+   }
+   printf("\n");
+
+   while(k < fsize){
+      printf("%05x ", offset);
+
+      for (int i = 0; i < 16; i++){
+         printf("%02x ", buffer[k]); k++;
+      }
+      printf("\n");
+      offset++;
+   }
 
 
    while (cpu.pc < fsize){
@@ -61,7 +72,7 @@ int main(){
 
 
       case 0x10: printf("NOP"); break;
-      case 0x11: printf("LXI    D,"); opbytes = 3; break;
+      case 0x11: printf("LXI    D,#$%02x%02x", codeP[2], codeP[1]); opbytes = 3; break;
       case 0x12: printf("STAX   D"); break; 
       case 0x13: printf("INX    D"); break;
       case 0x14: printf("INR    D"); break;
@@ -108,8 +119,7 @@ int main(){
       case 0x3b: printf("DCX     SP"); break;
       case 0x3c: printf("INR     A"); break;
       case 0x3d: printf("DCR     A"); break;
-      case 0x3e: printf("MVI     A,"); opbytes = 2; break;
-      case 0x3f: printf("CMC"); break;
+      case 0x3e: printf("MVI    A,#0x%02x", codeP[1]); opbytes = 2; break;
 
 
       case 0x40: printf("MOV    B,B"); break;
@@ -251,7 +261,7 @@ int main(){
       case 0xc0: printf("RNZ"); break;
       case 0xc1: printf("POP    B"); break;
       case 0xc2: printf("JNZ"); opbytes = 3; break;
-      case 0xc3: printf("JMP"); opbytes = 3;break;
+      case 0xc3: printf("JMP    $%02x%02x",codeP[2],codeP[1]); opbytes = 3; break;
       case 0xc4: printf("CNZ"); opbytes = 3;break;
       case 0xc5: printf("PUSH   B"); break;
       case 0xc6: printf("ADI"); opbytes = 2; break;
@@ -325,20 +335,6 @@ int main(){
       }
       printf("\n");
       cpu.pc += opbytes;
+
    }
-
-
-   //printf("\n");
-   /*for(int i = 0; i < 10; i++){
-      printf("%08x",pc);
-      pc++;
-      int count;
-      printf("%02x ", code[i]);
-      count++;
-      if (count >=16){
-         printf("\n");
-         count = 0;
-         }
-      }*/
-
 }
