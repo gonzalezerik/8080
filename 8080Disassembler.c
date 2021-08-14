@@ -106,7 +106,7 @@ int main(){
       case 0x2f: printf("CMA"); break;
 
       case 0x30: printf("SIM"); break;
-      case 0x31: printf("LXI     SP,");opbytes = 3; break;
+      case 0x31: printf("LXI     SP,#$%02x%02x", codeP[2], codeP[1]);opbytes = 3; break;
       case 0x32: printf("STA"); opbytes = 3; break;
       case 0x33: printf("INX     SP"); break;
       case 0x34: printf("INR     M"); break;
